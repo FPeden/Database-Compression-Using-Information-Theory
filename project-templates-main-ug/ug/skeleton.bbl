@@ -1,4 +1,4 @@
-\begin{thebibliography}{2}
+\begin{thebibliography}{7}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -10,9 +10,44 @@ Hiroki Arimura.
 \newblock Learning acyclic first-order horn sentences from entailment.
 \newblock In \emph{Proc. of the 8th Intl. Conf. on Algorithmic Learning Theory, ALT '97}, pages 432--445, 1997.
 
+\bibitem[Beeri et~al.(1977)Beeri, Fagin, and Howard]{DBLP:conf/sigmod/BeeriFH77}
+Catriel Beeri, Ronald Fagin, and John~H. Howard.
+\newblock A complete axiomatization for functional and multivalued dependencies in database relations.
+\newblock In Diane C.~P. Smith, editor, \emph{Proceedings of the 1977 {ACM} {SIGMOD} International Conference on Management of Data, Toronto, Canada, August 3-5, 1977}, pages 47--61. {ACM}, 1977.
+\newblock \doi{10.1145/509404.509414}.
+\newblock URL \url{https://doi.org/10.1145/509404.509414}.
+
+\bibitem[Beeri et~al.(1983)Beeri, Fagin, Maier, and Yannakakis]{DBLP:journals/jacm/BeeriFMY83}
+Catriel Beeri, Ronald Fagin, David Maier, and Mihalis Yannakakis.
+\newblock On the desirability of acyclic database schemes.
+\newblock \emph{J. {ACM}}, 30\penalty0 (3):\penalty0 479--513, 1983.
+\newblock \doi{10.1145/2402.322389}.
+\newblock URL \url{https://doi.org/10.1145/2402.322389}.
+
 \bibitem[Chang and Keisler(1990)]{P2}
 Chen-Chung Chang and H.~Jerome Keisler.
 \newblock \emph{Model Theory}.
 \newblock North-Holland, third edition, 1990.
+
+\bibitem[Kenig et~al.(2020)Kenig, Mundra, Prasaad, Salimi, and Suciu]{DBLP:conf/sigmod/KenigMPSS20}
+Batya Kenig, Pranay Mundra, Guna Prasaad, Babak Salimi, and Dan Suciu.
+\newblock Mining approximate acyclic schemes from relations.
+\newblock In David Maier, Rachel Pottinger, AnHai Doan, Wang{-}Chiew Tan, Abdussalam Alawini, and Hung~Q. Ngo, editors, \emph{Proceedings of the 2020 International Conference on Management of Data, {SIGMOD} Conference 2020, online conference [Portland, OR, USA], June 14-19, 2020}, pages 297--312. {ACM}, 2020.
+\newblock \doi{10.1145/3318464.3380573}.
+\newblock URL \url{https://doi.org/10.1145/3318464.3380573}.
+
+\bibitem[Lee(1987{\natexlab{a}})]{DBLP:journals/tse/Lee87}
+Tony~T. Lee.
+\newblock An information-theoretic analysis of relational databases - part {I:} data dependencies and information metric.
+\newblock \emph{{IEEE} Trans. Software Eng.}, 13\penalty0 (10):\penalty0 1049--1061, 1987{\natexlab{a}}.
+\newblock \doi{10.1109/TSE.1987.232847}.
+\newblock URL \url{https://doi.org/10.1109/TSE.1987.232847}.
+
+\bibitem[Lee(1987{\natexlab{b}})]{DBLP:journals/tse/Lee87a}
+Tony~T. Lee.
+\newblock An information-theoretic analysis of relational databases - part {II:} information structures of database schemas.
+\newblock \emph{{IEEE} Trans. Software Eng.}, 13\penalty0 (10):\penalty0 1061--1072, 1987{\natexlab{b}}.
+\newblock \doi{10.1109/TSE.1987.232848}.
+\newblock URL \url{https://doi.org/10.1109/TSE.1987.232848}.
 
 \end{thebibliography}

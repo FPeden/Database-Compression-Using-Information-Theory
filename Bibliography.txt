@@ -1,5 +1,15 @@
+Databases
 Mining Approximate Acyclic Schemes from Relations - https://arxiv.org/pdf/1911.12933
 Foundations of Databases Abiteboul, Hull, Vianu - https://wiki.epfl.ch/provenance2011/documents/foundations+of+databases-abiteboul-1995.pdf
 Qualifying the Loss of Acyclic Join Dependencies - https://www.semanticscholar.org/reader/7d5c0cfcf6357cb2798c21e5c1db2ab171f726d4
 Properties of Acyclic Database Schemes - https://dl.acm.org/doi/pdf/10.1145/800076.802489
 Multivalued Dependencies and a New Normal Form for Relational Databases - https://dl.acm.org/doi/epdf/10.1145/320557.320571
+
+
+Information Theory
+Elements of Information Theory - https://onlinelibrary.wiley.com/doi/epub/10.1002/047174882X
+
+
+Compression
+Database Compression - https://dl.acm.org/doi/pdf/10.1145/163090.163096
+Database Compression Techniques For Performance Optimization -https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=5485951

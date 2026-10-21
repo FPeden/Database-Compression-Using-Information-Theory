@@ -1,11 +1,16 @@
 \contentsline {chapter}{\numberline {1}Introduction}{1}{}%
 \contentsline {section}{\numberline {1.1}Using Sections}{2}{}%
 \contentsline {section}{\numberline {1.2}Citations}{2}{}%
-\contentsline {chapter}{\numberline {2}Your next chapter}{3}{}%
-\contentsline {chapter}{\numberline {3}Conclusions}{4}{}%
-\contentsline {section}{\numberline {3.1}Final Reminder}{4}{}%
-\contentsline {chapter}{Bibliography}{5}{}%
-\contentsline {chapter}{\numberline {A}First appendix}{6}{}%
-\contentsline {section}{\numberline {A.1}First section}{6}{}%
-\contentsline {chapter}{\numberline {B}Participants' information sheet}{7}{}%
-\contentsline {chapter}{\numberline {C}Participants' consent form}{8}{}%
+\contentsline {chapter}{\numberline {2}Background}{3}{}%
+\contentsline {section}{\numberline {2.1}Running Example}{3}{}%
+\contentsline {section}{\numberline {2.2}Acyclic Schemas and Multivalued Dependencies}{4}{}%
+\contentsline {section}{\numberline {2.3}Information Theory}{5}{}%
+\contentsline {section}{\numberline {2.4}Mining approximate acyclic schemes from relation}{6}{}%
+\contentsline {section}{\numberline {2.5}Database Compression Techniques}{6}{}%
+\contentsline {chapter}{\numberline {3}Conclusions}{7}{}%
+\contentsline {section}{\numberline {3.1}Final Reminder}{7}{}%
+\contentsline {chapter}{Bibliography}{8}{}%
+\contentsline {chapter}{\numberline {A}First appendix}{9}{}%
+\contentsline {section}{\numberline {A.1}First section}{9}{}%
+\contentsline {chapter}{\numberline {B}Participants' information sheet}{10}{}%
+\contentsline {chapter}{\numberline {C}Participants' consent form}{11}{}%

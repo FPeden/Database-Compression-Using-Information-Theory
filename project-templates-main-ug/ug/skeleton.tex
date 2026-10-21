@@ -15,13 +15,23 @@
 
 \usepackage{microtype} % recommended, but you can remove if it causes problems
 
-% \usepackage[numbers]{natbib} % for numerical citations
-\usepackage[round]{natbib} % recommended for citations
+\usepackage{amsmath, amssymb}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric}
+\usepackage{graphicx} 
+
+\setlength{\tabcolsep}{4pt}
+\newcommand{\pr}[1]{{\scriptsize #1}}          % probability labels
+\newcommand{\rd}[1]{\textcolor{red}{$#1$}}      % red cell
+
+\usepackage[numbers]{natbib} % for numerical citations
+% \usepackage[round]{natbib} % recommended for citations
 
 \begin{document}
 \begin{preliminary}
 
-\title{This is the Project Title}
+\title{Database Compression Using Information Theory}
 
 \author{Finlay Peden}
 
@@ -64,21 +74,6 @@ summary of your report.
    {\end{frontenv}\newpage}
 
 \begin{ethics}
-\textbf{Instructions:} \emph{Agree with your supervisor which
-statement you need to include. Then delete the statement that you are not using,
-and the instructions in italics.\\
-\textbf{Either complete and include this statement:}}\\ % DELETE THESE INSTRUCTIONS
-%
-% IF ETHICS APPROVAL WAS REQUIRED:
-This project obtained approval from the Informatics Research Ethics committee.\\
-Ethics application number: ???\\
-Date when approval was obtained: YYYY-MM-DD\\
-%
-\emph{[If the project required human participants, edit as appropriate, otherwise delete:]}\\ % DELETE THIS LINE
-The participants' information sheet and a consent form are included in the appendix.\\
-%
-% IF ETHICS APPROVAL WAS NOT REQUIRED:
-\textbf{\emph{Or include this statement:}}\\ % DELETE THIS LINE
 This project was planned in accordance with the Informatics Research
 Ethics policy. It did not involve any aspects that required approval
 from the Informatics Research Ethics committee.
@@ -159,9 +154,211 @@ and use {\tt {\textbackslash}citep} for a parenthetical citation:
 
 You may use any consistent reference style that you prefer, including ``[1]'' numerical citations. 
 
-\chapter{Your next chapter}
+\chapter{Background}
 
-A dissertation usually contains several chapters.
+In this chapter, we will give a general knowledge of the methods needed to understand our proposed compression approach and how to measure its effectiveness. We will start by discussing acyclic schemas along with Multivalued Dependencies(MVDs) and how they will be used to compress the data. We will then explain how the definition of entropy from information theory can be used in determining data loss during the compression. Then we summarize the work by \citet{DBLP:conf/sigmod/KenigMPSS20} in which they describe systems to discover MVDs and Acyclic Joins as well as how to use this information to compress data. Finally, we will briefly describe widely used database compression techniques. 
+
+To keep consistency we will use the same notation as \citet{DBLP:conf/sigmod/KenigMPSS20}. We denote
+by $[n] = \{1, . . . , n\}$. Let $\Omega$ be a set of variables, also called attributes. If $X , Y \subseteq  \Omega$, then XY denotes $X \cup  Y $.
+
+\section{Running Example}
+
+We will use (Figure~\ref{fig:example}) as an example to demonstrate the information about the background topics. We consider the relation $R$ over the signature $\Omega = \{A,B,C,D\}$. As illustrated, the table $R$ can be decomposed into smaller tables, and joining these tables reconstructs $R$. The join dependency is $R = R[AB] \bowtie R[AC] \bowtie R[BD]$. We will now explain these concepts with database compression in mind.
+
+\begin{figure}[h]
+\centering
+\noindent\makebox[\textwidth][l]{$R$:}\\[1pt]
+\resizebox{\textwidth}{!}{%
+\setlength{\tabcolsep}{7pt}%
+\begin{tabular}{|c|c|c|c|c}
+\cline{1-4}
+$A$ & $B$ & $C$ & $D$ & \\ \cline{1-4}
+$a_1$ & $b_1$ & $c_1$ & $d_1$ & \pr{1/4} \\
+$a_1$ & $b_2$ & $c_1$ & $d_2$ & \pr{1/4} \\
+$a_2$ & $b_1$ & $c_2$ & $d_1$ & \pr{1/4} \\
+$a_2$ & $b_2$ & $c_2$ & $d_2$ & \pr{1/4} \\
+\rd{a_1} & \rd{b_2} & \rd{c_2} & \rd{d_2} &  \\ \cline{1-4}
+\end{tabular}
+\;$=$\;
+\begin{tabular}{|c|c|c}
+\cline{1-2}
+$A$ & $B$ & \\ \cline{1-2}
+$a_1$ & $b_1$ & \pr{1/4} \\
+$a_1$ & $b_2$ & \pr{1/4} \\
+$a_2$ & $b_1$ & \pr{1/4} \\
+$a_2$ & $b_2$ & \pr{1/4} \\ \cline{1-2}
+\end{tabular}
+\;$\bowtie$\;
+\begin{tabular}{|c|c|c}
+\cline{1-2}
+$A$ & $C$ & \\ \cline{1-2}
+$a_1$ & $c_1$ & \pr{1/2} \\
+$a_2$ & $c_2$ & \pr{1/2} \\
+\rd{a_1} & \rd{c_2} & \\ \cline{1-2}
+\end{tabular}
+\;$\bowtie$\;
+\begin{tabular}{|c|c|c}
+\cline{1-2}
+$B$ & $D$ & \\ \cline{1-2}
+$b_1$ & $d_1$ & \pr{1/2} \\
+$b_2$ & $d_2$ & \pr{1/2} \\ \cline{1-2}
+\end{tabular}
+}
+\caption{A relation $R$ and its decomposition into an acyclic schema}
+\label{fig:example}
+\end{figure}
+
+
+\section{Acyclic Schemas and Multivalued Dependencies}
+In this section, ignore the probabilities (discussed in Section 2.3) and the red rows (discussed in Section 2.4) in (Figure~\ref{fig:example}).
+
+
+A schema is acyclic if it can be represented by a join tree. The schema of the four tables in (Figure~\ref{fig:example}) is acyclic because it admits the join tree shown in (Figure~\ref{fig:jointree}).
+
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}[
+    every node/.style={font=\itshape},
+    rel/.style={draw, ellipse, minimum height=0.8cm},
+    sep/.style={draw, rectangle, minimum height=0.6cm},
+    level distance=1.3cm]
+  \node[rel] (ab) at (0,0)      {AB};
+  \node[sep] (a)   at (-1.2,-1.3) {A};
+  \node[sep] (b)   at (1.2,-1.3)  {B};
+  \node[rel] (ac)  at (-1.2,-2.6) {AC};
+  \node[rel] (bd)  at (1.2,-2.6)  {BD};
+  \draw (ab) -- (a);
+  \draw (ab) -- (b);
+  \draw (a)  -- (ac);
+  \draw (b)  -- (bd);
+\end{tikzpicture}
+\caption{Join Tree}
+\label{fig:jointree}
+\end{figure}
+
+An acyclic schema is equivalent to a set of MVDs, one for each edge of the join tree. We will call the left-hand side of the MVD and the label of the edge in the join tree the $key$. For example the edge $AB \mathrel{\ooalign{$-$\cr\hidewidth$\smash{\raisebox{0.9ex}{$\scriptstyle\mathrm{B}$}}$\hidewidth\cr}} BD$ in the join tree defines the MVD $B \twoheadrightarrow D|AC$. The acyclic schema can be described by these two Multivalued Dependencies: $B \twoheadrightarrow D|AC$, $A \twoheadrightarrow C|BD$. The key $B$ "seperates" the attributes $D$ and $AC$ into the two different subtrees in the join tree. We will call such a set a $separator$
+
+We will note the projection of a relation instance $R$ on the attributes $Y$ as $R[Y]$. Where $\Omega$ is a schema and $Y \subseteq \Omega$.
+
+When trying to compress databases it is often useful to decompose a table $R$ with attributes $\Omega$ into smaller tables holding the same information as the original. A schema is a set of distinct attribute sets $S = \{\Omega_1, ..., \Omega_k\}$. We require that no set of attributes is contained in another as this would not contribute to the join. We can say that R satisfies the join dependency JD(S) when joining the projections $R[\Omega_1],...,R[\Omega_k]$ gives us exactly the table $R$. This also means that the split is lossless as no data is lost when decomposing or joining the tables.
+
+An MVD is a special type of join dependency in which one attribute of a schema determines multiple independent values of other attriubutes.  
+
+Fix a relation instance $R$ of size $N = |R|$, and schema $\Omega$.
+For $Y \subseteq \Omega$ we let $R[Y]$ denote the projection of $R$ onto
+the attributes $Y$.
+
+Let $X, Y, Z \subseteq \Omega$. A \emph{schema} is a set
+$\mathbf{S} = \{\Omega_1, \ldots, \Omega_k\}$ such that
+$\bigcup_{i=1}^{k} \Omega_i = \Omega$ and $\Omega_i \nsubseteq \Omega_j$
+for $i \neq j$. We say that the relation instance $R$ satisfies the
+\emph{join dependency} $\mathrm{JD}(\mathbf{S})$, and write
+$R \models \mathrm{JD}(\mathbf{S})$, if
+$R = \bowtie_{i=1}^{k} R[\Omega_i]$.
+We say that $R$ satisfies the \emph{multivalued dependency} (MVD)
+$\phi = X \twoheadrightarrow Y_1 | Y_2 | \ldots | Y_m$ where $m \geq 2$,
+the $Y_i$s are pairwise disjoint, and $XY_1 \cdots Y_m = \Omega$, if
+$R = R[XY_1] \bowtie \cdots \bowtie R[XY_m]$. We call $X$ the \emph{key}
+of the MVD and $\{Y_1, \ldots, Y_m\}$ it's \emph{dependents}, denoted
+$\mathrm{key}(\phi) = X$ and
+$\mathrm{dep}(\phi) = \{Y_1, \ldots, Y_m\}$. Most of the literature
+considers only MVDs with $m = 2$, which we call here
+\emph{standard MVDs}.
+
+\citet{DBLP:conf/sigmod/BeeriFH77} noted that a generalized MVD can encode concisely
+multiple MVDs; for example $X \twoheadrightarrow A|B|C$ holds iff
+$X \twoheadrightarrow AB|C$, $X \twoheadrightarrow A|BC$ and
+$X \twoheadrightarrow AC|B$ hold. We review a \emph{join tree} from \citep{DBLP:journals/jacm/BeeriFMY83}:
+
+\medskip
+\noindent\emph{Definition 2.1.} A \emph{join tree} is a pair
+$(\mathcal{T}, \chi)$ where $\mathcal{T}$ is an undirected tree, and
+$\chi$ is a function that maps each
+$u \in \mathrm{nodes}(\mathcal{T})$ to a set of variables $\chi(u)$,
+called a \emph{bag}, such that the following \emph{running intersection}
+property holds: for every variable $X$, the set
+$\{u \in \mathrm{nodes}(\mathcal{T}) \mid X \in \chi(u)\}$ is a connected
+component of $\mathcal{T}$. We denote by
+$\chi(\mathcal{T}) \stackrel{\mathrm{def}}{=} \bigcup_u \chi(u)$, the
+set of variables of the join tree.
+\medskip
+
+We often denote the join tree as $\mathcal{T}$, dropping $\chi$ when it
+is clear from the context. The \emph{schema} defined by $\mathcal{T}$ is
+$\mathbf{S} = \{\Omega_1, \ldots, \Omega_m\}$, where
+$\Omega_1, \ldots, \Omega_m$ are the bags of $\mathcal{T}$. We call a
+schema $\mathbf{S}$ \emph{acyclic} if there exists a join tree whose
+schema is $\mathbf{S}$. Since we required $\Omega_i \nsubseteq \Omega_j$
+for $i \neq j$, one can prove that any acyclic schema with $n$
+attributes and $m$ relations satisfies $m \leq n$. We say that a
+relation $R$ satisfies the \emph{acyclic join dependency} $\mathbf{S}$,
+and denote $R \models \mathrm{AJD}(\mathbf{S})$, if $\mathbf{S}$ is
+acyclic and $R \models \mathrm{JD}(\mathbf{S})$. An MVD
+$X \twoheadrightarrow Y_1|\cdots|Y_m$ represents a simple acyclic
+schema, namely $\mathbf{S} = \{XY_1, XY_2, \ldots, XY_m\}$.
+
+Let $\mathbf{S} = \{\Omega_1, \ldots, \Omega_m\}$ be an acyclic schema
+with join tree $(\mathcal{T}, \chi)$. We associate to every
+$(u,v) \in \mathrm{edges}(\mathcal{T})$ an MVD $\phi_{u,v}$ as follows.
+Let $\mathcal{T}_u$ and $\mathcal{T}_v$ be the two subtrees obtained by
+removing the edge $(u,v)$. Then, we denote by
+\[
+  \phi_{u,v} \stackrel{\mathrm{def}}{=}
+  \chi(u) \cap \chi(v) \twoheadrightarrow
+  \chi(\mathcal{T}_u) | \chi(\mathcal{T}_v).
+\]
+We call the \emph{support of} $\mathcal{T}$ the set of $m-1$ MVDs
+associated to its edges, in notation
+$\mathrm{MVD}(\mathcal{T}) =
+\{\phi_{u,v} \mid (u,v) \in \mathrm{edges}(\mathcal{T})\}$.
+If $\mathcal{T}$ defines the acyclic schema $\mathbf{S}$, then it
+satisfies $R \models \mathrm{AJD}(\mathbf{S})$ iff it satisfies all MVDs
+in its support: $R \models \phi_{u,v}$ for all
+$\phi_{u,v} \in \mathrm{MVD}(\mathcal{T})$ \citep[Thm. 8.8]{DBLP:journals/jacm/BeeriFMY83}.
+
+\medskip
+\noindent\emph{Example 2.1.} We will illustrate with the running example
+from Sec.~2. The tree in Fig.~2 is a join tree. Its bags are the ovals
+labeled $AF$, $ACD$, $ABD$, and $BDE$, and it is custom to show the
+intersection of two bags on the connecting edge.
+$\mathrm{MVD}(\mathcal{T}) = \{BD \twoheadrightarrow E|ACF,\;
+AD \twoheadrightarrow CF|BE,\; A \twoheadrightarrow F|BCDE\}$.
+\medskip
+
+\section{Information Theory}
+
+Information theroy is the mathematics of quantifying and measuring information. In our context we will be using it to measure the uncertainty in data. Entropy is the main component of information theory that is relevant to this project. It is used to calculate how uncertain a random variable is. 
+
+Let $X$ be a random variable with a finite domain $\mathcal{D}$ and
+probability mass $p$ (thus, $\sum_{x \in \mathcal{D}} p(x) = 1$). Its entropy is:
+\begin{equation}
+  H(X) \stackrel{\text{def}}{=} \sum_{x \in \mathcal{D}} p(x) \log \frac{1}{p(x)}
+  \label{eq:entropy}
+\end{equation}
+
+\citet{DBLP:journals/tse/Lee87,DBLP:journals/tse/Lee87a} formalized the following connection between databaseconstraints, and entropic measures. Let $(\mathcal{T}, \chi)$ be a jointree. We define the following expression:
+\setcounter{equation}{5}
+\begin{equation}
+  \mathcal{J}(\mathcal{T}, \chi) \stackrel{\mathrm{def}}{=}
+    \sum_{v \in \mathrm{nodes}(\mathcal{T})} H(\chi(v))
+    - \sum_{(v_1,v_2) \in \mathrm{edges}(\mathcal{T})}
+        H(\chi(v_1) \cap \chi(v_2))
+    - H(\chi(\mathcal{T}))
+  \label{eq:J}
+\end{equation}
+
+We abbreviate it with $\mathcal{J}(\mathcal{T})$, or $\mathcal{J}$, when
+$\mathcal{T}, \chi$ are clear from the context.
+
+\section{Mining approximate acyclic schemes from relation}
+MAIMON \citep{DBLP:conf/sigmod/KenigMPSS20}(Multivalued Approximate Inference Mining and NOrmalization) is the system proposed by Kenig et al. to discover MVDs and acyclic schemes in data. They describe enumeration algorithms that allow these discoveries. They also describe a method of calculating the joint entropy of a group of attributes. When evaluating their work they found that this method could be scaled to 1 million rows and 30 attributes with small amounts of spurious tuples. Where a spurious tuple is a row is a tuple not in the original database. Computing the entropy of a set of attributes is the most compuatationally expensive part of the MAIMON system. Their use of approximate MVDs allowed them to mark more schema as suitable for the compression leading to the compression working even when an exact MVD could not be found. If we now look at the red rows in Figure 2.1 we can see that by adding the row to the original table there now needs to be a new row in the BDE table. However this now means that when the tables are joined together there will be spurious table that was not in the original table. 
+
+If we now look at the red rows in the running example we can see that if we add the 5th red row to R then we also need to add the row $a_1$, $c_1$ in $R[AC]$ as well. However this leads to a spurious tuple in our final result after the joins being a new tuple ($a_1,b_1,c_2,d_1$). In the paper they observe this and note that if only perfect MVDs and acyclic schema were taken then it would not apply widely to databases as if one row in the database changed then the whole schema could no longer be valid. Therefore they chose to use approximate MVDs and acyclic schema instead. 
+
+
+
+\section{Database Compression Techniques}
+In this section we will give a brief overview of some general database compression techniques that give a better understanding of the topic of database compression and give an option to compress our data further when it can no longer be decomposed using the techniques in \citep{DBLP:conf/sigmod/KenigMPSS20}.
 
 \chapter{Conclusions}
 
