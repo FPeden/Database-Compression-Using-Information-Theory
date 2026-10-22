@@ -263,25 +263,36 @@ Let $X$ be a discrete random variable with a set of possible values $\mathcal{X}
   \label{eq:entropy}
 \end{equation}
 
-\emph{Mutual Information} is the measure of mutual dependence between two random variables. It equals 0 if an only if the two variables are independent. We write it as:
+\emph{Mutual Information} is the measure of mutual dependence between two random variables. Let $A,B,C \subseteq \Omega$. We write it as:
 
 \begin{equation}
   I(B;C|A) = H(AB) + H(AC) - H(ABC) - H(A)
 \end{equation}
 
-Following the work done by \citet{DBLP:journals/tse/Lee87,DBLP:journals/tse/Lee87a} as presented by \citet{DBLP:conf/sigmod/KenigMPSS20}. Let $\mathcal{T}$ be a join tree. We define the following expression:
+$I(B;C|A) = 0$ iff the variables B and C are conditionally independent given A.
+
+Following the work done by \citet{DBLP:journals/tse/Lee87,DBLP:journals/tse/Lee87a} as presented by \citet{DBLP:conf/sigmod/KenigMPSS20}. We define the following expression:
 \begin{equation}
-  J(S) = \sum_{i=1}^{n} H(\Omega_i)
-       - \sum_{(\Omega_i,\Omega_j)\in \mathrm{edges(\mathcal{T})}} H(\Omega_i \cap \Omega_j)
+  J(S) = \sum_{i=1}^{k} H(\Omega_i)
+       - \sum_{(\Omega_i,\Omega_j)\in \mathrm{edges}} H(\Omega_i \cap \Omega_j)
        - H(\Omega)
   \label{eq:J}
 \end{equation}
 
 \section{Mining approximate acyclic schemes from relation}
 \label{MAIMON}
-MAIMON \citep{DBLP:conf/sigmod/KenigMPSS20}(Multivalued Approximate Inference Mining and NOrmalization) is the system proposed by Kenig et al. to discover MVDs and acyclic schemes in data. They describe enumeration algorithms that allow these discoveries. They also describe a method of calculating the joint entropy of a group of attributes. When evaluating their work they found that this method could be scaled to 1 million rows and 30 attributes with small amounts of spurious tuples. Where a spurious tuple is a row is a tuple not in the original database. Computing the entropy of a set of attributes is the most computationally expensive part of the MAIMON system. Their use of approximate MVDs allowed them to mark more schema as suitable for the compression leading to the compression working even when an exact MVD could not be found. If we now look at the red rows in Figure 2.1 we can see that by adding the row to the original table there now needs to be a new row in the BDE table. However this now means that when the tables are joined together there will be spurious table that was not in the original table. 
+\textbf{Maimon} \citep{DBLP:conf/sigmod/KenigMPSS20}(Multivalued Approximate Inference Mining and NOrmalization) is the system proposed by \citet{DBLP:conf/sigmod/KenigMPSS20} to discover MVDs and acyclic schemes in data. When evaluating their work they found that this method could be scaled to 1 million rows and 30 attributes with small amounts of spurious tuples. Where a spurious tuple is a tuple not in the original data. Their use of approximate MVDs and approximate acyclic schemas allowed them to consider a schema valid even though it may not be a correct decomposition of a relation $R$. This allows us to use these approximate schemas for many applications such as database compression.
 
-If we now look at the red rows in the running example we can see that if we add the 5th red row to R then we also need to add the row $a_1$, $c_1$ in $R[AC]$ as well. However this leads to a spurious tuple in our final result after the joins being a new tuple ($a_1,b_1,c_2,d_1$). In the paper they observe this and note that if only perfect MVDs and acyclic schema were taken then it would not apply widely to databases as if one row in the database changed then the whole schema could no longer be valid. Therefore they chose to use approximate MVDs and acyclic schema instead. 
+If we now look at the red rows in the running example we can see that if we add the 5th red row to R then we also need to add the row $a_1$, $c_1$ in $R[AC]$ as well. However, this leads to a spurious tuple after we compute the join $R[AB] \bowtie R[AC] \bowtie R[BD]$. The spurious tuple that is not in $R$ is ($a_1,b_1,c_2,d_1$). In the paper they observe this and note that if only perfect MVDs and acyclic schema were taken then it would not apply widely to databases as if one row in the database changed then the whole schema may no longer be valid. Therefore they chose to use approximate MVDs and acyclic schema instead. They use $J$ to compute whether a schema is approximate. They call these \emph{approximate schema} $\epsilon$ \emph{-schema} if $J(S) \leq \epsilon$. The notation they use is, $R \models_\epsilon \mathrm{AJD}(S)$.
+
+They used three main techniques to efficiently create schema and design their enumeration algorithms. The first technique is to be able to determine approximate acyclic schema from approximate MVDs. The second technique they describe is a way to reduce the number of MVDs by only discovering full MVDs, and finally they only discover full MVDs that have a minimal separator as a key. 
+
+In the first technique they use an identity and a shannon inequality to discover approximate schemas and MVDs. With the second technique they create a notation for one MVD refining another MVD. If we have two MVDs $\phi = X \twoheadrightarrow A_1|\ldots|A_m$ and  $\psi = X \twoheadrightarrow B_1|\ldots|B_k$. We say $\phi$ \emph{refines} $\psi$ if they both have the same key and for every $A_i$ that is an element of the \emph{dependents} of $\phi$ there exists a $B_j$ that is an element of the dependents of $\psi$ such that $A_i \subseteq B_j$. We denote this relationship as $\phi \succeq \psi$. They denote \textsc{FullMVD}$_{\varepsilon}(R, X)$ to be the set of all full $\epsilon-\mathrm{MVDs}$ with the key $X$. They describe an MVD $\psi$ as full, if $R \models_\epsilon \psi$, and for all strict refinements $\phi \succ \psi$ $R \nvDash_\epsilon \phi$. Finally they define \emph{minimal separators} which are small attribute sets that make two attributes approximately independent. See Definition 5.5 in \citet{DBLP:conf/sigmod/KenigMPSS20} for the formal definition.
+
+Then the paper describes the two main phases of their \textbf{Maimon} system and the algorithms corresponding to these phases. The first phase uses the algorithm \textbf{MVDMiner} which discovers $\epsilon-$MVDs over a relation $R$. This is also the section where they compute the entropy $H(X)$ with their procedure $getEntropy_R(X)$. Which they have noted is the most computationally expensive part of the \textbf{Maimon} system.
+
+The second phase of the \textbf{Maimon} system computes acyclic $\epsilon-$ schemes from the set of full $\epsilon-$ MVDs discovered in the first phase. The algorithm they use in this phase is \textbf{ASMiner} which will generate an acyclic schema for all the $\epsilon-$ MVDs returned from the \textbf{MVDMiner}.
+
 
 
 
