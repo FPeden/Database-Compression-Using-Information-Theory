@@ -156,14 +156,13 @@ You may use any consistent reference style that you prefer, including ``[1]'' nu
 
 \chapter{Background}
 
-In this chapter, we will give a general knowledge of the methods needed to understand our proposed compression approach and how to measure its effectiveness. We will start by discussing acyclic schemas along with Multivalued Dependencies(MVDs) and how they will be used to compress the data. We will then explain how the definition of entropy from information theory can be used in determining data loss during the compression. Then we summarize the work by \citet{DBLP:conf/sigmod/KenigMPSS20} in which they describe systems to discover MVDs and Acyclic Joins as well as how to use this information to compress data. Finally, we will briefly describe widely used database compression techniques. 
+In this chapter, we will give a general knowledge of the methods needed to understand our proposed compression approach and how to measure its effectiveness. We will start by discussing acyclic schemas along with Multivalued Dependencies (MVDs) and how they will be used to compress the data. We will then explain how the definition of entropy from information theory can be used in determining data loss during the compression. Then we summarize the work by \citet{DBLP:conf/sigmod/KenigMPSS20} in which they describe systems to discover MVDs and Acyclic Join Dependencies. Finally, we will briefly describe widely used database compression techniques. 
 
-To keep consistency we will use the same notation as \citet{DBLP:conf/sigmod/KenigMPSS20}. We denote
-by $[n] = \{1, . . . , n\}$. Let $\Omega$ be a set of variables, also called attributes. If $X , Y \subseteq  \Omega$, then XY denotes $X \cup  Y $.
+To keep consistency we will use the same notation as \citet{DBLP:conf/sigmod/KenigMPSS20}. Let $\Omega$ be a set of variables, also called attributes. If $X , Y \subseteq  \Omega$, then XY denotes $X \cup  Y $.
 
 \section{Running Example}
 
-We will use (Figure~\ref{fig:example}) as an example to demonstrate the information about the background topics. We consider the relation $R$ over the signature $\Omega = \{A,B,C,D\}$. As illustrated, the table $R$ can be decomposed into smaller tables, and joining these tables reconstructs $R$. The join dependency is $R = R[AB] \bowtie R[AC] \bowtie R[BD]$. We will now explain these concepts with database compression in mind.
+We will use (Figure~\ref{fig:example}) as an example to demonstrate the information about the background topics. We consider the relation $R$ over the schema $\Omega = \{A,B,C,D\}$. As illustrated, the table $R$ can be decomposed into smaller tables, and joining these tables reconstructs $R$. The join dependency is $R = R[AB] \bowtie R[AC] \bowtie R[BD]$. This dependency only holds for the rows in black. The red rows will be used as an example of approximate acyclic schemas in Section~\ref{MAIMON}.
 
 \begin{figure}[h]
 \centering
@@ -210,10 +209,15 @@ $b_2$ & $d_2$ & \pr{1/2} \\ \cline{1-2}
 
 
 \section{Acyclic Schemas and Multivalued Dependencies}
-In this section, ignore the probabilities (discussed in Section 2.3) and the red rows (discussed in Section 2.4) in (Figure~\ref{fig:example}).
+In this section, ignore the probabilities (discussed in Sec. \ref{Information Theory}) and the red rows (discussed in Sec. \ref{MAIMON}) in Figure~\ref{fig:example}.
 
+For $Y \subseteq \Omega$ we let $R[Y]$ denote the projection of $R$ onto the attributes $Y$.
 
-A schema is acyclic if it can be represented by a join tree. The schema of the four tables in (Figure~\ref{fig:example}) is acyclic because it admits the join tree shown in (Figure~\ref{fig:jointree}).
+When trying to compress databases, it is often useful to decompose a table $R$ with attributes $\Omega$ into smaller tables. A schema is a set $S = \{\Omega_1, \ldots, \Omega_k\}$ of attribute sets whose union is $\Omega$, where no set is contained in another, since a contained set adds no information to the join. $R$ satisfies the join dependency $\mathrm{JD}(S)$, written $R \models \mathrm{JD}(S)$, when joining the projections $R[\Omega_1],\ldots,R[\Omega_k]$ gives us exactly the table $R$. This also means that the decomposition is lossless as joining the projections gives exactly $R$.
+
+An MVD is a special type of join dependency in which, for each value of a set of attributes $X$, the remaining attributes split into groups that vary independently of one another. Let $X,Y_1, \ldots, Y_m \subseteq \Omega$. We say $R$ satisfies the multivalued dependency $X \twoheadrightarrow Y_1 | Y_2 | \ldots | Y_m$  if $R = R[XY_1] \bowtie \cdots \bowtie R[XY_m]$. Where $m\geq 2$, the $Y_i$s are pairwise disjoint and $XY_1 \cdots Y_m = \Omega$. We call $X$ the \emph{key} and $\{Y_1, \ldots, Y_m\}$ the \emph{dependents}. When $m=2$ we call it a \emph{standard MVD} which is the most common form in the literature. 
+
+A schema is \emph{acyclic} if it has a join tree. The schema $\{AB, AC, BD\}$ of Figure~\ref{fig:example} is acyclic, as shown by the join tree in Figure~\ref{fig:jointree}.
 
 \begin{figure}[h]
 \centering
@@ -236,122 +240,46 @@ A schema is acyclic if it can be represented by a join tree. The schema of the f
 \label{fig:jointree}
 \end{figure}
 
-An acyclic schema is equivalent to a set of MVDs, one for each edge of the join tree. We will call the left-hand side of the MVD and the label of the edge in the join tree the $key$. For example the edge $AB \mathrel{\ooalign{$-$\cr\hidewidth$\smash{\raisebox{0.9ex}{$\scriptstyle\mathrm{B}$}}$\hidewidth\cr}} BD$ in the join tree defines the MVD $B \twoheadrightarrow D|AC$. The acyclic schema can be described by these two Multivalued Dependencies: $B \twoheadrightarrow D|AC$, $A \twoheadrightarrow C|BD$. The key $B$ "seperates" the attributes $D$ and $AC$ into the two different subtrees in the join tree. We will call such a set a $separator$
+An acyclic schema can be fully described by a set of MVDs, one for each edge of the join tree. The acyclic schema can be described by these two multivalued dependencies: $B \twoheadrightarrow D|AC$, $A \twoheadrightarrow C|BD$. For example the edge $AB \mathrel{\ooalign{$-$\cr\hidewidth$\smash{\raisebox{0.9ex}{$\scriptstyle\mathrm{B}$}}$\hidewidth\cr}} BD$ in the join tree defines the MVD $B \twoheadrightarrow D|AC$. The \emph{separator} of an edge is the intersection of the two bags it joins. Removing an edge splits the tree in two, and the attributes outside the separator split accordingly. The separator and these two groups give an MVD whose key is the separator.
 
-We will note the projection of a relation instance $R$ on the attributes $Y$ as $R[Y]$. Where $\Omega$ is a schema and $Y \subseteq \Omega$.
+The \emph{separator} of an edge of a join tree is the intersection of the two bags it joins. Removing the edge splits the tree into two subtrees, and the attributes of each subtree that are not in the separator form the two dependents of an MVD whose key is the separator. In Figure~\ref{fig:jointree}, the edge between $AB$ and $BD$ has separator $B$ and gives the MVD $B \twoheadrightarrow D | AC$, and the edge between $AB$ and $AC$ has separator $A$ and gives the MVD $A \twoheadrightarrow C | BD$. Beeri et al.~\cite{DBLP:journals/jacm/BeeriFMY83} showed that $R$ satisfies the acyclic join dependency of the schema exactly when it satisfies the MVD of every edge.
 
-When trying to compress databases it is often useful to decompose a table $R$ with attributes $\Omega$ into smaller tables holding the same information as the original. A schema is a set of distinct attribute sets $S = \{\Omega_1, ..., \Omega_k\}$. We require that no set of attributes is contained in another as this would not contribute to the join. We can say that R satisfies the join dependency JD(S) when joining the projections $R[\Omega_1],...,R[\Omega_k]$ gives us exactly the table $R$. This also means that the split is lossless as no data is lost when decomposing or joining the tables.
+A \emph{join tree} for a schema $S$ is an undirected tree with a set of nodes $\Omega_1, \ldots, \Omega_k $ of S, where the following properties hold: every edge of the graph ($\Omega_i, \Omega_j$) must be labelled with the set of attributes $\Omega_i \cap \Omega_j$ and for all attributes $A$ in $\Omega_i \cap \Omega_j$ each edge along a path between the pair of distinct nodes $\Omega_i, \Omega_j$($\Omega_i \neq \Omega_j$) must include the label $A$ \citep{DBLP:journals/jacm/BeeriFMY83}.
 
-An MVD is a special type of join dependency in which one attribute of a schema determines multiple independent values of other attriubutes.  
+We say that $R$ satisfies the \emph{acyclic join dependency} $\mathrm{AJD}(S)$, written $R \models \mathrm{AJD}(S)$, if the schema $S$ is acyclic and $R \models \mathrm{JD}(S)$. A single MVD $X \twoheadrightarrow Y_1 | \cdots | Y_m$ is the simplest case, since it is the join dependency of the schema $\{XY_1, \ldots, XY_m\}$, whose sets all intersect in $X$. This also explains why one MVD with several dependents is a compact way of writing several standard ones: for example,
+$X \twoheadrightarrow A|B|C$ holds exactly when $X \twoheadrightarrow AB|C$, $X \twoheadrightarrow A|BC$ and
+$X \twoheadrightarrow AC|B$ all hold \citep{DBLP:conf/sigmod/BeeriFH77}.
 
-Fix a relation instance $R$ of size $N = |R|$, and schema $\Omega$.
-For $Y \subseteq \Omega$ we let $R[Y]$ denote the projection of $R$ onto
-the attributes $Y$.
-
-Let $X, Y, Z \subseteq \Omega$. A \emph{schema} is a set
-$\mathbf{S} = \{\Omega_1, \ldots, \Omega_k\}$ such that
-$\bigcup_{i=1}^{k} \Omega_i = \Omega$ and $\Omega_i \nsubseteq \Omega_j$
-for $i \neq j$. We say that the relation instance $R$ satisfies the
-\emph{join dependency} $\mathrm{JD}(\mathbf{S})$, and write
-$R \models \mathrm{JD}(\mathbf{S})$, if
-$R = \bowtie_{i=1}^{k} R[\Omega_i]$.
-We say that $R$ satisfies the \emph{multivalued dependency} (MVD)
-$\phi = X \twoheadrightarrow Y_1 | Y_2 | \ldots | Y_m$ where $m \geq 2$,
-the $Y_i$s are pairwise disjoint, and $XY_1 \cdots Y_m = \Omega$, if
-$R = R[XY_1] \bowtie \cdots \bowtie R[XY_m]$. We call $X$ the \emph{key}
-of the MVD and $\{Y_1, \ldots, Y_m\}$ it's \emph{dependents}, denoted
-$\mathrm{key}(\phi) = X$ and
-$\mathrm{dep}(\phi) = \{Y_1, \ldots, Y_m\}$. Most of the literature
-considers only MVDs with $m = 2$, which we call here
-\emph{standard MVDs}.
-
-\citet{DBLP:conf/sigmod/BeeriFH77} noted that a generalized MVD can encode concisely
-multiple MVDs; for example $X \twoheadrightarrow A|B|C$ holds iff
-$X \twoheadrightarrow AB|C$, $X \twoheadrightarrow A|BC$ and
-$X \twoheadrightarrow AC|B$ hold. We review a \emph{join tree} from \citep{DBLP:journals/jacm/BeeriFMY83}:
-
-\medskip
-\noindent\emph{Definition 2.1.} A \emph{join tree} is a pair
-$(\mathcal{T}, \chi)$ where $\mathcal{T}$ is an undirected tree, and
-$\chi$ is a function that maps each
-$u \in \mathrm{nodes}(\mathcal{T})$ to a set of variables $\chi(u)$,
-called a \emph{bag}, such that the following \emph{running intersection}
-property holds: for every variable $X$, the set
-$\{u \in \mathrm{nodes}(\mathcal{T}) \mid X \in \chi(u)\}$ is a connected
-component of $\mathcal{T}$. We denote by
-$\chi(\mathcal{T}) \stackrel{\mathrm{def}}{=} \bigcup_u \chi(u)$, the
-set of variables of the join tree.
-\medskip
-
-We often denote the join tree as $\mathcal{T}$, dropping $\chi$ when it
-is clear from the context. The \emph{schema} defined by $\mathcal{T}$ is
-$\mathbf{S} = \{\Omega_1, \ldots, \Omega_m\}$, where
-$\Omega_1, \ldots, \Omega_m$ are the bags of $\mathcal{T}$. We call a
-schema $\mathbf{S}$ \emph{acyclic} if there exists a join tree whose
-schema is $\mathbf{S}$. Since we required $\Omega_i \nsubseteq \Omega_j$
-for $i \neq j$, one can prove that any acyclic schema with $n$
-attributes and $m$ relations satisfies $m \leq n$. We say that a
-relation $R$ satisfies the \emph{acyclic join dependency} $\mathbf{S}$,
-and denote $R \models \mathrm{AJD}(\mathbf{S})$, if $\mathbf{S}$ is
-acyclic and $R \models \mathrm{JD}(\mathbf{S})$. An MVD
-$X \twoheadrightarrow Y_1|\cdots|Y_m$ represents a simple acyclic
-schema, namely $\mathbf{S} = \{XY_1, XY_2, \ldots, XY_m\}$.
-
-Let $\mathbf{S} = \{\Omega_1, \ldots, \Omega_m\}$ be an acyclic schema
-with join tree $(\mathcal{T}, \chi)$. We associate to every
-$(u,v) \in \mathrm{edges}(\mathcal{T})$ an MVD $\phi_{u,v}$ as follows.
-Let $\mathcal{T}_u$ and $\mathcal{T}_v$ be the two subtrees obtained by
-removing the edge $(u,v)$. Then, we denote by
-\[
-  \phi_{u,v} \stackrel{\mathrm{def}}{=}
-  \chi(u) \cap \chi(v) \twoheadrightarrow
-  \chi(\mathcal{T}_u) | \chi(\mathcal{T}_v).
-\]
-We call the \emph{support of} $\mathcal{T}$ the set of $m-1$ MVDs
-associated to its edges, in notation
-$\mathrm{MVD}(\mathcal{T}) =
-\{\phi_{u,v} \mid (u,v) \in \mathrm{edges}(\mathcal{T})\}$.
-If $\mathcal{T}$ defines the acyclic schema $\mathbf{S}$, then it
-satisfies $R \models \mathrm{AJD}(\mathbf{S})$ iff it satisfies all MVDs
-in its support: $R \models \phi_{u,v}$ for all
-$\phi_{u,v} \in \mathrm{MVD}(\mathcal{T})$ \citep[Thm. 8.8]{DBLP:journals/jacm/BeeriFMY83}.
-
-\medskip
-\noindent\emph{Example 2.1.} We will illustrate with the running example
-from Sec.~2. The tree in Fig.~2 is a join tree. Its bags are the ovals
-labeled $AF$, $ACD$, $ABD$, and $BDE$, and it is custom to show the
-intersection of two bags on the connecting edge.
-$\mathrm{MVD}(\mathcal{T}) = \{BD \twoheadrightarrow E|ACF,\;
-AD \twoheadrightarrow CF|BE,\; A \twoheadrightarrow F|BCDE\}$.
-\medskip
+The set of MVDs obtained from the edges of a join tree $\mathcal{T}$ is called the \emph{support} of $\mathcal{T}$. Since a tree with $k$ nodes has $k-1$ edges, the support contains $k-1$ MVDs. Because no set of $S$ may be contained in another, an acyclic schema over $n$ attributes has at most $n$ sets \citep{DBLP:journals/jacm/BeeriFMY83}, so a decomposition of $R$ into an acyclic schema never produces more tables than $R$ has attributes. In Figure~\ref{fig:jointree} the support consists of two MVDs and the schema has three sets, which is less than the 4 attributes of $R$.
 
 \section{Information Theory}
+\label{Information Theory}
 
-Information theroy is the mathematics of quantifying and measuring information. In our context we will be using it to measure the uncertainty in data. Entropy is the main component of information theory that is relevant to this project. It is used to calculate how uncertain a random variable is. 
+Information theory is the mathematics of quantifying and measuring information. In our context we will be using it to measure the uncertainty in data. Entropy is the main component of information theory that is relevant to this project. It is used to calculate how uncertain a random variable is. 
 
-Let $X$ be a random variable with a finite domain $\mathcal{D}$ and
-probability mass $p$ (thus, $\sum_{x \in \mathcal{D}} p(x) = 1$). Its entropy is:
+Let $X$ be a discrete random variable with a set of possible values $\mathcal{X}$ and probability mass function $p(x)$ such that the sum of all probabilities is equal to one. The entropy of X is defined as:
 \begin{equation}
-  H(X) \stackrel{\text{def}}{=} \sum_{x \in \mathcal{D}} p(x) \log \frac{1}{p(x)}
+  H(X) = \sum_{x \in \mathcal{X}} p(x) \log \frac{1}{p(x)}
   \label{eq:entropy}
 \end{equation}
 
-\citet{DBLP:journals/tse/Lee87,DBLP:journals/tse/Lee87a} formalized the following connection between databaseconstraints, and entropic measures. Let $(\mathcal{T}, \chi)$ be a jointree. We define the following expression:
-\setcounter{equation}{5}
+\emph{Mutual Information} is the measure of mutual dependence between two random variables. It equals 0 if an only if the two variables are independent. We write it as:
+
 \begin{equation}
-  \mathcal{J}(\mathcal{T}, \chi) \stackrel{\mathrm{def}}{=}
-    \sum_{v \in \mathrm{nodes}(\mathcal{T})} H(\chi(v))
-    - \sum_{(v_1,v_2) \in \mathrm{edges}(\mathcal{T})}
-        H(\chi(v_1) \cap \chi(v_2))
-    - H(\chi(\mathcal{T}))
+  I(B;C|A) = H(AB) + H(AC) - H(ABC) - H(A)
+\end{equation}
+
+Following the work done by \citet{DBLP:journals/tse/Lee87,DBLP:journals/tse/Lee87a} as presented by \citet{DBLP:conf/sigmod/KenigMPSS20}. Let $\mathcal{T}$ be a join tree. We define the following expression:
+\begin{equation}
+  J(S) = \sum_{i=1}^{n} H(\Omega_i)
+       - \sum_{(\Omega_i,\Omega_j)\in \mathrm{edges(\mathcal{T})}} H(\Omega_i \cap \Omega_j)
+       - H(\Omega)
   \label{eq:J}
 \end{equation}
 
-We abbreviate it with $\mathcal{J}(\mathcal{T})$, or $\mathcal{J}$, when
-$\mathcal{T}, \chi$ are clear from the context.
-
 \section{Mining approximate acyclic schemes from relation}
-MAIMON \citep{DBLP:conf/sigmod/KenigMPSS20}(Multivalued Approximate Inference Mining and NOrmalization) is the system proposed by Kenig et al. to discover MVDs and acyclic schemes in data. They describe enumeration algorithms that allow these discoveries. They also describe a method of calculating the joint entropy of a group of attributes. When evaluating their work they found that this method could be scaled to 1 million rows and 30 attributes with small amounts of spurious tuples. Where a spurious tuple is a row is a tuple not in the original database. Computing the entropy of a set of attributes is the most compuatationally expensive part of the MAIMON system. Their use of approximate MVDs allowed them to mark more schema as suitable for the compression leading to the compression working even when an exact MVD could not be found. If we now look at the red rows in Figure 2.1 we can see that by adding the row to the original table there now needs to be a new row in the BDE table. However this now means that when the tables are joined together there will be spurious table that was not in the original table. 
+\label{MAIMON}
+MAIMON \citep{DBLP:conf/sigmod/KenigMPSS20}(Multivalued Approximate Inference Mining and NOrmalization) is the system proposed by Kenig et al. to discover MVDs and acyclic schemes in data. They describe enumeration algorithms that allow these discoveries. They also describe a method of calculating the joint entropy of a group of attributes. When evaluating their work they found that this method could be scaled to 1 million rows and 30 attributes with small amounts of spurious tuples. Where a spurious tuple is a row is a tuple not in the original database. Computing the entropy of a set of attributes is the most computationally expensive part of the MAIMON system. Their use of approximate MVDs allowed them to mark more schema as suitable for the compression leading to the compression working even when an exact MVD could not be found. If we now look at the red rows in Figure 2.1 we can see that by adding the row to the original table there now needs to be a new row in the BDE table. However this now means that when the tables are joined together there will be spurious table that was not in the original table. 
 
 If we now look at the red rows in the running example we can see that if we add the 5th red row to R then we also need to add the row $a_1$, $c_1$ in $R[AC]$ as well. However this leads to a spurious tuple in our final result after the joins being a new tuple ($a_1,b_1,c_2,d_1$). In the paper they observe this and note that if only perfect MVDs and acyclic schema were taken then it would not apply widely to databases as if one row in the database changed then the whole schema could no longer be valid. Therefore they chose to use approximate MVDs and acyclic schema instead. 
 
