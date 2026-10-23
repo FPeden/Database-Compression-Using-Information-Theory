@@ -7,10 +7,10 @@
 \contentsline {section}{\numberline {2.3}Information Theory}{5}{}%
 \contentsline {section}{\numberline {2.4}Mining approximate acyclic schemes from relation}{6}{}%
 \contentsline {section}{\numberline {2.5}Database Compression Techniques}{7}{}%
-\contentsline {chapter}{\numberline {3}Conclusions}{8}{}%
-\contentsline {section}{\numberline {3.1}Final Reminder}{8}{}%
-\contentsline {chapter}{Bibliography}{9}{}%
-\contentsline {chapter}{\numberline {A}First appendix}{10}{}%
-\contentsline {section}{\numberline {A.1}First section}{10}{}%
-\contentsline {chapter}{\numberline {B}Participants' information sheet}{11}{}%
-\contentsline {chapter}{\numberline {C}Participants' consent form}{12}{}%
+\contentsline {chapter}{\numberline {3}Conclusions}{9}{}%
+\contentsline {section}{\numberline {3.1}Final Reminder}{9}{}%
+\contentsline {chapter}{Bibliography}{10}{}%
+\contentsline {chapter}{\numberline {A}First appendix}{12}{}%
+\contentsline {section}{\numberline {A.1}First section}{12}{}%
+\contentsline {chapter}{\numberline {B}Participants' information sheet}{13}{}%
+\contentsline {chapter}{\numberline {C}Participants' consent form}{14}{}%

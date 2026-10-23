@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.10.5)  22 OCT 2026 21:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.10.5)  23 OCT 2026 17:21
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -440,36 +440,39 @@ File: tikzlibrarytopaths.code.tex 2026-08-01 v3.1.12 (3.1.12)
 File: tikzlibraryshapes.geometric.code.tex 2026-08-01 v3.1.12 (3.1.12)
  (c:/texlive/2026/texmf-dist/tex/generic/pgf/libraries/shapes/pgflibraryshapes.geometric.code.tex
 File: pgflibraryshapes.geometric.code.tex 2026-08-01 v3.1.12 (3.1.12)
-)) (c:/texlive/2026/texmf-dist/tex/latex/natbib/natbib.sty
+))
+\c@definition=\count326
+\c@theorem=\count327
+ (c:/texlive/2026/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip55
 \bibsep=\skip56
 LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count326
+\c@NAT@ctr=\count328
 ) (c:/texlive/2026/texmf-dist/tex/latex/l3kernel/l3backend-pdftex.def
 File: l3backend-pdftex.def 2026-09-09 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count327
+\l__color_backend_stack_int=\count329
 ) (./skeleton.aux)
 \openout1 = `skeleton.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMS/pzccm/m/n on input line 31.
-LaTeX Font Info:    Trying to load font information for OMS+pzccm on input line 31.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMS/pzccm/m/n on input line 36.
+LaTeX Font Info:    Trying to load font information for OMS+pzccm on input line 36.
  (c:/texlive/2026/texmf-dist/tex/latex/psnfss/omspzccm.fd
 File: omspzccm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/pzccm.
 )
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 36.
+LaTeX Font Info:    ... okay on input line 36.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -507,16 +510,16 @@ LaTeX Font Info:    ... okay on input line 31.
 
 (c:/texlive/2026/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count328
+\scratchcounter=\count330
 \scratchdimen=\dimen285
 \scratchbox=\box67
-\nofMPsegments=\count329
-\nofMParguments=\count330
+\nofMPsegments=\count331
+\nofMParguments=\count332
 \everyMPshowfont=\toks38
-\MPscratchCnt=\count331
+\MPscratchCnt=\count333
 \MPscratchDim=\dimen286
-\MPnumerator=\count332
-\makeMPintoPDFobject=\count333
+\MPnumerator=\count334
+\makeMPintoPDFobject=\count335
 \everyMPtoPDFconversion=\toks39
 ) (c:/texlive/2026/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -541,16 +544,16 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Info: Redefining \microtypecontext on input line 31.
-Package microtype Info: Applying patch `item' on input line 31.
-Package microtype Info: Applying patch `toc' on input line 31.
-Package microtype Info: Applying patch `eqnum' on input line 31.
+LaTeX Info: Redefining \microtypecontext on input line 36.
+Package microtype Info: Applying patch `item' on input line 36.
+Package microtype Info: Applying patch `toc' on input line 36.
+Package microtype Info: Applying patch `eqnum' on input line 36.
 
 
-Package microtype Warning: Unable to apply patch `footnote' on input line 31.
+Package microtype Warning: Unable to apply patch `footnote' on input line 36.
 
-Package microtype Info: Applying patch `verbatim' on input line 31.
-LaTeX Info: Redefining \microtypesetup on input line 31.
+Package microtype Info: Applying patch `verbatim' on input line 36.
+LaTeX Info: Redefining \microtypesetup on input line 36.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -565,7 +568,7 @@ Package microtype Info: No adjustment of character kerning.
 File: mt-ptm.cfg 2006/04/20 v1.7 microtype config. file: Times (RS)
 )
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 18.66588pt on input line 70.
+(Font)              scaled to size 18.66588pt on input line 75.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `phv' (encoding: OT1).
 (microtype)             For optimal results, create family-specific settings.
@@ -573,20 +576,20 @@ Package microtype Info: Loading generic protrusion settings for font family
 <eushield-normal.pdf, id=4, 369.38pt x 373.395pt>
 File: eushield-normal.pdf Graphic file (type pdf)
 <use eushield-normal.pdf>
-Package pdftex.def Info: eushield-normal.pdf  used on input line 70.
+Package pdftex.def Info: eushield-normal.pdf  used on input line 75.
 (pdftex.def)             Requested size: 369.37909pt x 373.39409pt.
  [1
 
 {c:/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{c:/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc} <./eushield-normal.pdf>]
 LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
-(Font)              scaled to size 10.79993pt on input line 70.
+(Font)              scaled to size 10.79993pt on input line 75.
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 10.79993pt on input line 70.
+(Font)              scaled to size 10.79993pt on input line 75.
  [1
 
 ] [2] [3]
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 22.39185pt on input line 90.
+(Font)              scaled to size 22.39185pt on input line 95.
  (./skeleton.toc
 LaTeX Font Info:    Trying to load font information for OT1+ptmcm on input line 2.
  (c:/texlive/2026/texmf-dist/tex/latex/psnfss/ot1ptmcm.fd
@@ -629,67 +632,82 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 
 ]
 Chapter 1.
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 99.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 104.
 (c:/texlive/2026/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
-(Font)              scaled to size 15.55188pt on input line 138.
+(Font)              scaled to size 15.55188pt on input line 143.
  [1
 
 
 ]
-LaTeX Font Info:    Trying to load font information for OMS+pcr on input line 146.
+LaTeX Font Info:    Trying to load font information for OMS+pcr on input line 151.
  (c:/texlive/2026/texmf-dist/tex/latex/psnfss/omspcr.fd
 File: omspcr.fd 
 )
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 146.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 151.
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <12> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 157.
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 162.
 LaTeX Font Info:    Font shape `OT1/phv/m/sl' will be
-(Font)              scaled to size 10.79993pt on input line 157.
+(Font)              scaled to size 10.79993pt on input line 162.
  [2]
 Chapter 2.
 [3
 
-] [4] [5] [6] [7]
+] [4] [5] [6] [7] [8]
 Chapter 3.
-(./skeleton.bbl [8
+(./skeleton.bbl [9
 
 ]
-Underfull \hbox (badness 1043) in paragraph at lines 40--45
-[]\OT1/ptm/m/n/12 (+20) Tony T. Lee.  An information-theoretic anal-y-sis of re-la-tional databases -
+Underfull \hbox (badness 10000) in paragraph at lines 33--37
+[]\OT1/ptm/m/n/12 (+20) Yann Col-let.  LZ4: Ex-tremely fast com-pres-sion al-go-rithm.
  []
 
 
-Underfull \hbox (badness 1558) in paragraph at lines 40--45
+Underfull \hbox (badness 1057) in paragraph at lines 52--57
 \OT1/ptm/m/it/12 (+20) Eng.\OT1/ptm/m/n/12 (+20) , 13(10):1049--1061, 1987.  doi: 10.1109/TSE.1987.232847.  URL
  []
 
 
-Underfull \hbox (badness 1043) in paragraph at lines 47--52
-[]\OT1/ptm/m/n/12 (+20) Tony T. Lee.  An information-theoretic anal-y-sis of re-la-tional databases -
- []
-
-
-Underfull \hbox (badness 1558) in paragraph at lines 47--52
+Underfull \hbox (badness 1057) in paragraph at lines 59--64
 \OT1/ptm/m/it/12 (+20) Eng.\OT1/ptm/m/n/12 (+20) , 13(10):1061--1072, 1987.  doi: 10.1109/TSE.1987.232848.  URL
  []
 
-) [9
-
-]
-Appendix A.
 [10
 
 ]
+Underfull \hbox (badness 1430) in paragraph at lines 66--71
+[]\OT1/ptm/m/n/12 (+20) Mark A. Roth and Scott J. Van Horn.  Database com-pres-sion.  \OT1/ptm/m/it/12 (+20) SIG-
+ []
+
+
+Underfull \hbox (badness 1852) in paragraph at lines 66--71
+\OT1/ptm/m/it/12 (+20) MOD Rec.\OT1/ptm/m/n/12 (+20) , 22(3):31--39, 1993.  doi: 10.1145/163090.163096.  URL
+ []
+
+
+Underfull \hbox (badness 1728) in paragraph at lines 73--78
+[]\OT1/ptm/m/n/12 (+20) Terry A. Welch.  A tech-nique for high-performance data com-pres-sion.
+ []
+
+
+Underfull \hbox (badness 1655) in paragraph at lines 73--78
+\OT1/ptm/m/it/12 (+20) Com-puter\OT1/ptm/m/n/12 (+20) , 17(6):8--19, 1984.  doi: 10.1109/MC.1984.1659158.  URL
+ []
+
+) [11]
+Appendix A.
+[12
+
+]
 Appendix B.
-[11
+[13
 
 ]
 Appendix C.
-[12
+[14
 
 ] (./skeleton.aux)
  ***********
@@ -698,18 +716,18 @@ L3 programming layer <2026-09-09>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 20092 strings out of 467050
- 386179 string characters out of 5410550
- 819803 words of memory out of 5000000
- 48807 multiletter control sequences out of 15000+600000
- 684300 words of font info for 286 fonts, out of 8000000 for 9000
+ 20161 strings out of 467050
+ 387254 string characters out of 5410550
+ 820174 words of memory out of 5000000
+ 48855 multiletter control sequences out of 15000+600000
+ 687417 words of font info for 303 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  92i,14n,94p,1274b,691s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/symbol/usyr.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmri8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/zapfchan/uzcmi8a.pfb>
-Output written on skeleton.pdf (17 pages, 202023 bytes).
+<c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex9.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/symbol/usyr.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmb8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmr8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/times/utmri8a.pfb><c:/texlive/2026/texmf-dist/fonts/type1/urw/zapfchan/uzcmi8a.pfb>
+Output written on skeleton.pdf (19 pages, 221645 bytes).
 PDF statistics:
- 141 PDF objects out of 1000 (max. 8388607)
- 90 compressed objects within 1 object stream
+ 153 PDF objects out of 1000 (max. 8388607)
+ 98 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 86034 words of extra memory for PDF output out of 89155 (max. 10000000)
+ 89106 words of extra memory for PDF output out of 89155 (max. 10000000)
 

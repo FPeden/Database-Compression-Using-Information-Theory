@@ -25,6 +25,11 @@
 \newcommand{\pr}[1]{{\scriptsize #1}}          % probability labels
 \newcommand{\rd}[1]{\textcolor{red}{$#1$}}      % red cell
 
+\newtheorem{definition}{Definition}[section]
+\newtheorem{example}[definition]{Example}
+
+\newtheorem{theorem}{Theorem}[section]
+
 \usepackage[numbers]{natbib} % for numerical citations
 % \usepackage[round]{natbib} % recommended for citations
 
@@ -244,7 +249,19 @@ An acyclic schema can be fully described by a set of MVDs, one for each edge of 
 
 The \emph{separator} of an edge of a join tree is the intersection of the two bags it joins. Removing the edge splits the tree into two subtrees, and the attributes of each subtree that are not in the separator form the two dependents of an MVD whose key is the separator. In Figure~\ref{fig:jointree}, the edge between $AB$ and $BD$ has separator $B$ and gives the MVD $B \twoheadrightarrow D | AC$, and the edge between $AB$ and $AC$ has separator $A$ and gives the MVD $A \twoheadrightarrow C | BD$. Beeri et al.~\cite{DBLP:journals/jacm/BeeriFMY83} showed that $R$ satisfies the acyclic join dependency of the schema exactly when it satisfies the MVD of every edge.
 
-A \emph{join tree} for a schema $S$ is an undirected tree with a set of nodes $\Omega_1, \ldots, \Omega_k $ of S, where the following properties hold: every edge of the graph ($\Omega_i, \Omega_j$) must be labelled with the set of attributes $\Omega_i \cap \Omega_j$ and for all attributes $A$ in $\Omega_i \cap \Omega_j$ each edge along a path between the pair of distinct nodes $\Omega_i, \Omega_j$($\Omega_i \neq \Omega_j$) must include the label $A$ \citep{DBLP:journals/jacm/BeeriFMY83}.
+We will describe a \emph{join tree} using the definition from \citet{DBLP:conf/sigmod/KenigMPSS20} as we will use the same notation for join trees when computing entropy.
+
+\begin{definition}\label{def:jointree}
+A \emph{join tree} is a pair $(\mathcal{T}, \chi)$ where $\mathcal{T}$ is
+an undirected tree, and $\chi$ is a function that maps each
+$u \in \mathrm{nodes}(\mathcal{T})$ to a set of variables $\chi(u)$,
+called a \emph{bag}, such that the following \emph{running intersection}
+property holds: for every variable $X$, the set
+$\{u \in \mathrm{nodes}(\mathcal{T}) \mid X \in \chi(u)\}$ is a connected
+component of $\mathcal{T}$. We denote by
+$\chi(\mathcal{T}) \stackrel{\mathrm{def}}{=} \bigcup_u \chi(u)$, the set
+of variables of the join tree.
+\end{definition}
 
 We say that $R$ satisfies the \emph{acyclic join dependency} $\mathrm{AJD}(S)$, written $R \models \mathrm{AJD}(S)$, if the schema $S$ is acyclic and $R \models \mathrm{JD}(S)$. A single MVD $X \twoheadrightarrow Y_1 | \cdots | Y_m$ is the simplest case, since it is the join dependency of the schema $\{XY_1, \ldots, XY_m\}$, whose sets all intersect in $X$. This also explains why one MVD with several dependents is a compact way of writing several standard ones: for example,
 $X \twoheadrightarrow A|B|C$ holds exactly when $X \twoheadrightarrow AB|C$, $X \twoheadrightarrow A|BC$ and
@@ -271,19 +288,54 @@ Let $X$ be a discrete random variable with a set of possible values $\mathcal{X}
 
 $I(B;C|A) = 0$ iff the variables B and C are conditionally independent given A.
 
-Following the work done by \citet{DBLP:journals/tse/Lee87,DBLP:journals/tse/Lee87a} as presented by \citet{DBLP:conf/sigmod/KenigMPSS20}. We define the following expression:
+\citet{DBLP:conf/sigmod/KenigMPSS20} uses the entropy of the \emph{empirical distribution} which is the uniform distribution of it tuples in which all data in the relation $R$ has an equal probability of $\frac{1}{N}$. Where $R$ is a relationship with attributes $\Omega = \{X_1, \ldots, X_n\}$ and $N$ is the number of tuples. For any subset of variables $\alpha \subseteq \{1, \ldots, n\}$, we denote by $X_\alpha$ the set of variables $X_i$ where $i \in \alpha$, and by $R(X_\alpha = x_\alpha)$ the subset of tuples $t \in R$ where $t[X_\alpha] = x_\alpha$ for fixed values $x_\alpha$. Due to the uniformity of the empirical distribution, the marginal probability of this subset is expressed as:
 \begin{equation}
-  J(S) = \sum_{i=1}^{k} H(\Omega_i)
-       - \sum_{(\Omega_i,\Omega_j)\in \mathrm{edges}} H(\Omega_i \cap \Omega_j)
-       - H(\Omega)
+p(X_\alpha = x_\alpha) = \frac{|R(X_\alpha = x_\alpha)|}{N}
+\end{equation}
+
+Therefore we can state the entropy:
+
+\begin{equation}
+H(X_\alpha) \stackrel{\text{def}}{=} \log N - \frac{1}{N} \sum_{x_\alpha \in \mathcal{D}_\alpha} |R(X_\alpha = x_\alpha)| \log |R(X_\alpha = x_\alpha)|
+\end{equation}
+
+where $\mathcal{D}_\alpha$ represents the domain of possible values for $X_\alpha$.
+
+Which \citet{DBLP:conf/sigmod/KenigMPSS20} notes can be computed by the SQL query:
+
+\begin{equation*}
+\text{\texttt{Select }} X_\alpha, \text{\texttt{count(*)}} \times \log(\text{\texttt{count(*)}}) \text{\texttt{ From }} R \text{\texttt{ Group By }} X_\alpha.
+\end{equation*}
+
+Following the work done by \citet{DBLP:journals/tse/Lee87,DBLP:journals/tse/Lee87a} as presented by \citet{DBLP:conf/sigmod/KenigMPSS20}. We define the following expression to be the connection between entropic measures and database constraints:
+
+\setcounter{equation}{5}
+\begin{equation}
+  \mathcal{J}(\mathcal{T}, \chi) \stackrel{\mathrm{def}}{=}
+    \sum_{v \in \mathrm{nodes}(\mathcal{T})} H(\chi(v))
+    - \sum_{(v_1,v_2) \in \mathrm{edges}(\mathcal{T})}
+        H(\chi(v_1) \cap \chi(v_2))
+    - H(\chi(\mathcal{T}))
   \label{eq:J}
 \end{equation}
+
+We abbreviate it with $\mathcal{J}(\mathcal{T})$, or $\mathcal{J}$, when $\mathcal{T}, \chi$ are clear from the context. Lee proved that $\mathcal{J}$ does not depend on the tree itself but instead relies on the schema $S$ defined by the tree. This allows us to denote $\mathcal{J}(\mathcal{T})$ as $\mathcal{J}(S)$ if $S$ is an acyclic schema.
+
+We will also state the theorem in \citet{DBLP:conf/sigmod/KenigMPSS20} which provides us with a relationship between MVDs and mutual information. The theorem is:
+
+\begin{theorem}[\citep{DBLP:journals/tse/Lee87a}]\label{thm:lee}
+Let $H$ be the entropy of the empirical distribution on $R$, and let
+$\mathbf{S}$ be any acyclic schema. Then
+$R \models \mathrm{AJD}(\mathbf{S})$ iff $\mathcal{J}(\mathbf{S}) = 0$.
+\end{theorem}
+
+For a standard MVD this theorem implies that $R \models X \twoheadrightarrow Y|Z$ iff $I(Y;Z|X) = 0$.
 
 \section{Mining approximate acyclic schemes from relation}
 \label{MAIMON}
 \textbf{Maimon} \citep{DBLP:conf/sigmod/KenigMPSS20}(Multivalued Approximate Inference Mining and NOrmalization) is the system proposed by \citet{DBLP:conf/sigmod/KenigMPSS20} to discover MVDs and acyclic schemes in data. When evaluating their work they found that this method could be scaled to 1 million rows and 30 attributes with small amounts of spurious tuples. Where a spurious tuple is a tuple not in the original data. Their use of approximate MVDs and approximate acyclic schemas allowed them to consider a schema valid even though it may not be a correct decomposition of a relation $R$. This allows us to use these approximate schemas for many applications such as database compression.
 
-If we now look at the red rows in the running example we can see that if we add the 5th red row to R then we also need to add the row $a_1$, $c_1$ in $R[AC]$ as well. However, this leads to a spurious tuple after we compute the join $R[AB] \bowtie R[AC] \bowtie R[BD]$. The spurious tuple that is not in $R$ is ($a_1,b_1,c_2,d_1$). In the paper they observe this and note that if only perfect MVDs and acyclic schema were taken then it would not apply widely to databases as if one row in the database changed then the whole schema may no longer be valid. Therefore they chose to use approximate MVDs and acyclic schema instead. They use $J$ to compute whether a schema is approximate. They call these \emph{approximate schema} $\epsilon$ \emph{-schema} if $J(S) \leq \epsilon$. The notation they use is, $R \models_\epsilon \mathrm{AJD}(S)$.
+If we now look at the red rows in the running example we can see that if we add the 5th red row to R then we also need to add the row $a_1$, $c_1$ in $R[AC]$ as well. However, this leads to a spurious tuple after we compute the join $R[AB] \bowtie R[AC] \bowtie R[BD]$. The spurious tuple that is not in $R$ is ($a_1,b_1,c_2,d_1$). In the paper they observe this and note that if only perfect MVDs and acyclic schema were taken then it would not apply widely to databases as if one row in the database changed then the whole schema may no longer be valid. Therefore they chose to use approximate MVDs and acyclic schema instead. They use $\mathcal{J}$ to compute whether a schema is approximate. They call these \emph{approximate schema} $\epsilon$ \emph{-schema} if $\mathcal{J}(S) \leq \epsilon$. The notation they use is, $R \models_\epsilon \mathrm{AJD}(S)$.
 
 They used three main techniques to efficiently create schema and design their enumeration algorithms. The first technique is to be able to determine approximate acyclic schema from approximate MVDs. The second technique they describe is a way to reduce the number of MVDs by only discovering full MVDs, and finally they only discover full MVDs that have a minimal separator as a key. 
 
@@ -298,6 +350,27 @@ The second phase of the \textbf{Maimon} system computes acyclic $\epsilon-$ sche
 
 \section{Database Compression Techniques}
 In this section we will give a brief overview of some general database compression techniques that give a better understanding of the topic of database compression and give an option to compress our data further when it can no longer be decomposed using the techniques in \citep{DBLP:conf/sigmod/KenigMPSS20}.
+
+When trying to compress data we can either have lossless or lossy compression. \emph{Lossless} compression is when the data is compressed and decompression returns exactly the original data. This is useful in databases as there are large amounts of data that need to be compressed while retaining all the information in the database. \emph{Lossy} compression is used when a small amount of data loss is acceptable such as in JPEG image files. Lossy compression is used as it allows for much smaller sizes of data once compressed.
+
+I will define some basic metrics to measure the performance of compression techniques from \citep{DBLP:journals/sigmod/RothH93}. The compression ratio is:
+
+\begin{equation}
+\mathrm{CR} = \frac{\text{data  size without compression}}{\text{data size with compression}}
+\end{equation}
+
+where the unit of data depends on the application it is used in. From this compression ratio we can also work out the expected reduction in data size with this equation:
+
+\begin{equation}
+\mathrm{REDUCTION} = (1 - \frac{1}{\text{CR}}) \times 100\%
+\end{equation}
+
+Dictionary based compression methods are widely used for lossless database compression. The general idea behind dictionary based methods is to identify repeated values or sequences of data and replace them with a code that is shorter than the original data. Decompressing the data replaces the codes for the original data. Some examples of dictionary based methods are the LZ4 compression algorithm \citep{collet-lz4} and the LZW compression algorithm \citep{DBLP:journals/computer/Welch84}.
+
+Huffman coding \citep{huffman1952method} is another compression method that is commonly used alongside other techniques for lossless compression. The general idea is that variable length codes are assigned to the data based on how frequently the data appears, with more frequent values getting shorter codes. The coding ensures that all codes have a different prefix which allows the data to be decoded without any ambiguity.
+
+Other popular techniques for database compression include null
+suppression, which omits NULL values or runs of zeros and blanks and records where they were, and run-length encoding, which stores a value together with the number of times it repeats.
 
 \chapter{Conclusions}
 

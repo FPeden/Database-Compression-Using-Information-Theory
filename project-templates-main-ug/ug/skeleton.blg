@@ -3,44 +3,46 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: skeleton.aux
 The style file: plainnat.bst
 Database file #1: mybibfile.bib
-You've used 7 entries,
+Warning--empty year in collet-lz4
+You've used 11 entries,
             2773 wiz_defined-function locations,
-            654 strings with 6744 characters,
-and the built_in function-call counts, 3865 in all, are:
-= -- 364
-> -- 192
-< -- 7
-+ -- 66
-- -- 58
-* -- 314
-:= -- 586
-add.period$ -- 33
-call.type$ -- 7
-change.case$ -- 38
-chr.to.int$ -- 6
-cite$ -- 14
-duplicate$ -- 177
-empty$ -- 318
-format.name$ -- 67
-if$ -- 830
+            689 strings with 7426 characters,
+and the built_in function-call counts, 5448 in all, are:
+= -- 523
+> -- 243
+< -- 11
++ -- 85
+- -- 73
+* -- 429
+:= -- 830
+add.period$ -- 51
+call.type$ -- 11
+change.case$ -- 55
+chr.to.int$ -- 10
+cite$ -- 23
+duplicate$ -- 252
+empty$ -- 467
+format.name$ -- 88
+if$ -- 1164
 int.to.chr$ -- 2
 int.to.str$ -- 1
-missing$ -- 8
-newline$ -- 53
-num.names$ -- 32
-pop$ -- 72
+missing$ -- 11
+newline$ -- 79
+num.names$ -- 48
+pop$ -- 105
 preamble$ -- 1
-purify$ -- 31
+purify$ -- 44
 quote$ -- 0
-skip$ -- 134
+skip$ -- 185
 stack$ -- 0
-substring$ -- 185
-swap$ -- 37
+substring$ -- 259
+swap$ -- 41
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 72
-warning$ -- 0
-while$ -- 37
+type$ -- 116
+warning$ -- 1
+while$ -- 55
 width$ -- 0
-write$ -- 120
+write$ -- 182
+(There was 1 warning)
