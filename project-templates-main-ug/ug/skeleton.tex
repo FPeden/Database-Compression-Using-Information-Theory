@@ -263,6 +263,9 @@ $\chi(\mathcal{T}) \stackrel{\mathrm{def}}{=} \bigcup_u \chi(u)$, the set
 of variables of the join tree.
 \end{definition}
 
+We will often denote the join tree as $\mathcal{T}$
+when $\mathcal{X}$ is clear from the context. The bags of $\mathcal{T}$ are the attributes $\Omega_1, \ldots \Omega_k$, so $\mathcal{T}$ determines the schema $S = \{\Omega_1, \ldots \Omega_m\}$.
+
 We say that $R$ satisfies the \emph{acyclic join dependency} $\mathrm{AJD}(S)$, written $R \models \mathrm{AJD}(S)$, if the schema $S$ is acyclic and $R \models \mathrm{JD}(S)$. A single MVD $X \twoheadrightarrow Y_1 | \cdots | Y_m$ is the simplest case, since it is the join dependency of the schema $\{XY_1, \ldots, XY_m\}$, whose sets all intersect in $X$. This also explains why one MVD with several dependents is a compact way of writing several standard ones: for example,
 $X \twoheadrightarrow A|B|C$ holds exactly when $X \twoheadrightarrow AB|C$, $X \twoheadrightarrow A|BC$ and
 $X \twoheadrightarrow AC|B$ all hold \citep{DBLP:conf/sigmod/BeeriFH77}.

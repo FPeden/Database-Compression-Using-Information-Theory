@@ -1,14 +1,14 @@
 # Fdb version 4
-["bibtex skeleton"] 1792772335.48848 "skeleton.aux" "skeleton.bbl" "skeleton" 1792772522.35257 0
+["bibtex skeleton"] 1792831746.08919 "skeleton.aux" "skeleton.bbl" "skeleton" 1792831748.5172 0
   "./mybibfile.bib" 1792757817 6158 0633f88594f9a507058d9fae8af3c235 ""
   "c:/texlive/2026/texmf-dist/bibtex/bst/natbib/plainnat.bst" 1791157735 26816 ffe5423d2019860bad9f54bc402fac15 ""
-  "skeleton.aux" 1792772520 4566 b9e0ab8d343360d722e1dbc9c822218d "pdflatex"
+  "skeleton.aux" 1792831747 4566 b9e0ab8d343360d722e1dbc9c822218d "pdflatex"
   (generated)
   "skeleton.bbl"
   "skeleton.blg"
   (rewritten before read)
-["pdflatex"] 1792772519.01871 "c:/Users/fcped/OneDrive/Documents/Finlay/University/Year_4/Database-Compression-Using-Information-Theory/project-templates-main-ug/ug/skeleton.tex" "skeleton.pdf" "skeleton" 1792772522.35351 0
-  "c:/Users/fcped/OneDrive/Documents/Finlay/University/Year_4/Database-Compression-Using-Information-Theory/project-templates-main-ug/ug/skeleton.tex" 1792772517 25820 1f156d938bad76d3cc674949c90c9129 ""
+["pdflatex"] 1792831746.4748 "c:/Users/fcped/OneDrive/Documents/Finlay/University/Year_4/Database-Compression-Using-Information-Theory/project-templates-main-ug/ug/skeleton.tex" "skeleton.pdf" "skeleton" 1792831748.51764 0
+  "c:/Users/fcped/OneDrive/Documents/Finlay/University/Year_4/Database-Compression-Using-Information-Theory/project-templates-main-ug/ug/skeleton.tex" 1792831743 26069 8efea4251a1bf09afdda29d562468672 ""
   "c:/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc" 1791155992 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "c:/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1791156380 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2026/texmf-dist/fonts/tfm/adobe/helvetic/phvb7t.tfm" 1791156664 2240 eb56c13537f4d8a0bd3fafc25572b1bd ""
@@ -203,10 +203,10 @@
   "eushield-normal.pdf" 1791150166 26561 461664f1e86e3692d274d2f967a785e1 ""
   "eushield.sty" 1791150166 1493 1ab6df5e08d7ba83c21cc6b1c6e8fc04 ""
   "infthesis.cls" 1791150166 25628 09760f6c841d183aab95d4c34f488432 ""
-  "skeleton.aux" 1792772520 4566 b9e0ab8d343360d722e1dbc9c822218d "pdflatex"
-  "skeleton.bbl" 1792772336 4072 defd7253860c8f7c7077c5458ec1cd7b "bibtex skeleton"
-  "skeleton.tex" 1792772517 25820 1f156d938bad76d3cc674949c90c9129 ""
-  "skeleton.toc" 1792772520 1082 f2c3fbf70eaa5124cc2a90a12546c7c6 "pdflatex"
+  "skeleton.aux" 1792831747 4566 b9e0ab8d343360d722e1dbc9c822218d "pdflatex"
+  "skeleton.bbl" 1792831746 4072 defd7253860c8f7c7077c5458ec1cd7b "bibtex skeleton"
+  "skeleton.tex" 1792831743 26069 8efea4251a1bf09afdda29d562468672 ""
+  "skeleton.toc" 1792831747 1082 f2c3fbf70eaa5124cc2a90a12546c7c6 "pdflatex"
   "ugcheck.sty" 1791150166 3107 5a2c486049ad51f36abb9f9fef98a43d ""
   (generated)
   "skeleton.aux"
